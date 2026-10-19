@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f7fb">
+<meta name="description" content="24 道石原氏风格色觉自测图版，帮助学生与教师快速筛查红绿色觉异常。">
+<title>色觉自查 · 石原氏风格色盲色弱测验</title>
+<style>
+  :root{
+    --ink:#0f172a;
+    --ink-2:#4a5568;
+    --ink-3:#8b95a7;
+    --line:#e5e9f2;
+    --brand:#5b4bf0;
+    --brand-2:#a855f7;
+    --ok:#0f9d76;
+    --warn:#d97706;
+    --bad:#dc2626;
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --shadow:0 24px 60px -30px rgba(15,23,42,.30), 0 2px 10px rgba(15,23,42,.04);
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    min-height:100dvh;
+    color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    background:
+      radial-gradient(1100px 640px at 8% -10%, #e7ebff 0%, rgba(231,235,255,0) 62%),
+      radial-gradient(900px 560px at 96% 2%, #ffe8f4 0%, rgba(255,232,244,0) 58%),
+      radial-gradient(820px 620px at 62% 108%, #e3fbf1 0%, rgba(227,251,241,0) 60%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    width:100%;
+    max-width:860px;
+    margin:0 auto;
+    padding:clamp(18px,4vw,40px) clamp(14px,4vw,22px) 64px;
+  }
+  .screen{ display:none; }
+  .screen.active{ display:block; animation:rise .45s cubic-bezier(.22,1,.36,1); }
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+
+  /* ---------- 通用组件 ---------- */
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 14px; border-radius:999px;
+    font-size:13px; font-weight:650; letter-spacing:.01em;
+    color:#4b3fe0; background:#eef0ff; border:1px solid #dde1ff;
+  }
+  .badge i{ width:7px; height:7px; border-radius:50%; background:linear-gradient(135deg,var(--brand),var(--brand-2)); }
+  .btn{
+    appearance:none; border:0; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    font:inherit; font-weight:700; font-size:clamp(15px,2.2vw,17px);
+    padding:16px 30px; border-radius:16px;
+    transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+    touch-action:manipulation;
+  }
+  .btn-primary{
+    color:#fff;
+    background:linear-gradient(135deg,#5b4bf0 0%,#8b5cf6 52%,#a855f7 100%);
+    box-shadow:0 18px 34px -18px rgba(91,75,240,.85), inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 24px 40px -18px rgba(91,75,240,.9), inset 0 1px 0 rgba(255,255,255,.22); }
+  .btn-primary:active{ transform:translateY(0) scale(.99); }
+  .btn-ghost{
+    color:var(--ink-2); background:#fff; border:1.5px solid var(--line);
+    box-shadow:0 6px 16px -14px rgba(15,23,42,.6);
+  }
+  .btn-ghost:hover{ transform:translateY(-1px); border-color:#c9cdf6; color:#3f33d6; }
+  .muted{ color:var(--ink-3); }
+  .shot{
+    display:grid; place-items:center;
+    border-radius:50%; background:#fff; padding:6px;
+    box-shadow:0 0 0 1px rgba(15,23,42,.07), 0 26px 54px -38px rgba(15,23,42,.6), 0 6px 18px -14px rgba(15,23,42,.22);
+  }
+  .shot canvas{ display:block; border-radius:50%; }
+
+  /* ---------- 封面 ---------- */
+  .hero{ text-align:center; padding-top:clamp(6px,3vw,22px); }
+  .hero h1{
+    margin:18px 0 14px;
+    font-size:clamp(27px,5.6vw,42px);
+    line-height:1.2; letter-spacing:-.022em; font-weight:800;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(105deg,#5b4bf0,#a855f7 58%,#f472b6);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .lede{
+    max-width:34em; margin:0 auto;
+    font-size:clamp(14.5px,2vw,16.5px); line-height:1.85; color:var(--ink-2);
+  }
+  .demo-row{
+    display:flex; justify-content:center; gap:clamp(14px,4vw,30px);
+    margin:clamp(22px,5vw,34px) 0 6px; flex-wrap:wrap;
+  }
+  .demo{ text-align:center; }
+  .demo .shot{ padding:4px; }
+  .demo figcaption{ margin-top:10px; font-size:12px; font-weight:600; color:var(--ink-3); letter-spacing:.02em; }
+  .notes{
+    margin:clamp(22px,5vw,32px) 0 26px;
+    padding:20px 22px; text-align:left;
+    background:rgba(255,255,255,.72); border:1px solid var(--line); border-radius:20px;
+    box-shadow:0 18px 44px -34px rgba(15,23,42,.5);
+    backdrop-filter:blur(6px);
+  }
+  .notes h3{ margin:0 0 12px; font-size:14px; letter-spacing:.06em; color:var(--ink-3); font-weight:700; }
+  .notes ul{ margin:0; padding:0; list-style:none; display:grid; gap:9px; }
+  .notes li{ position:relative; padding-left:22px; font-size:14px; color:var(--ink-2); line-height:1.65; }
+  .notes li::before{
+    content:""; position:absolute; left:2px; top:.62em;
+    width:9px; height:9px; border-radius:50%;
+    background:linear-gradient(135deg,#b9b3fb,#d8b4fe);
+  }
+  .cta{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .cta .btn-primary{ padding:17px 46px; }
+  .fine{ margin:0; font-size:12.5px; color:var(--ink-3); }
+
+  /* ---------- 答题 ---------- */
+  .quiz{ display:flex; flex-direction:column; align-items:center; gap:clamp(14px,3.4vw,20px); }
+  .quiz-head{ width:100%; }
+  .track{ height:8px; border-radius:999px; background:#e7eaf3; overflow:hidden; }
+  .track > i{
+    display:block; height:100%; width:0; border-radius:999px;
+    background:linear-gradient(90deg,#5b4bf0,#a855f7);
+    transition:width .38s cubic-bezier(.22,1,.36,1);
+  }
+  .meta-row{
+    display:flex; justify-content:space-between; gap:12px;
+    margin-top:10px; font-size:13px; font-weight:600; color:var(--ink-3);
+    font-variant-numeric:tabular-nums;
+  }
+  .meta-row .clock{ display:inline-flex; align-items:center; gap:6px; }
+  .meta-row .clock::before{ content:""; width:6px; height:6px; border-radius:50%; background:#c3c9d8; }
+  .lv-chip{
+    padding:2px 10px; border-radius:999px; font-size:11.5px; font-weight:700;
+    background:#f0f2f9; color:#6b7688; border:1px solid #e6e9f3; letter-spacing:.02em;
+  }
+  .lv-chip.lv2{ background:#fff5e6; color:#a2680a; border-color:#ffe4bd; }
+  .lv-chip.lv3{ background:#fdeceb; color:#b02a2a; border-color:#f9d8d7; }
+  .ask{ width:100%; text-align:center; }
+  .ask h2{ margin:0; font-size:clamp(17px,3.4vw,21px); font-weight:750; letter-spacing:-.01em; }
+  .ask p{ margin:6px 0 0; font-size:13px; color:var(--ink-3); }
+  .options{
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:clamp(10px,2.6vw,14px); width:100%; max-width:470px;
+  }
+  .opt{
+    appearance:none; cursor:pointer; font:inherit; color:var(--ink);
+    border:1.5px solid var(--line); background:#fff; border-radius:18px;
+    padding:clamp(14px,3.6vw,20px) 8px;
+    font-size:clamp(22px,6.4vw,30px); font-weight:750; font-variant-numeric:tabular-nums;
+    letter-spacing:.05em;
+    box-shadow:0 8px 18px -16px rgba(15,23,42,.55);
+    transition:transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease, color .16s ease;
+    touch-action:manipulation;
+  }
+  .opt:hover{ transform:translateY(-2px); border-color:#c6c9f7; box-shadow:0 14px 26px -18px rgba(91,75,240,.65); }
+  .opt:active{ transform:translateY(0) scale(.985); }
+  .opt:focus-visible{ outline:3px solid rgba(91,75,240,.35); outline-offset:3px; }
+  .opt.picked{ border-color:#5b4bf0; background:#f3f1ff; color:#3b2fd0; }
+  .quiz .hint{ margin:0; font-size:12.5px; color:var(--ink-3); text-align:center; }
+  .quiz .hint b{ color:var(--ink-2); font-weight:650; }
+
+  /* ---------- 结果 ---------- */
+  .result{ display:flex; flex-direction:column; gap:clamp(16px,3.4vw,22px); }
+  .panel{
+    background:var(--card); border:1px solid var(--line); border-radius:24px;
+    padding:clamp(20px,4.6vw,32px); box-shadow:var(--shadow);
+  }
+  .verdict-head{ text-align:center; }
+  .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 15px; border-radius:999px;
+    font-size:12.5px; font-weight:700; letter-spacing:.04em;
+  }
+  .tag.ok{ color:#0a7a5c; background:#e6f8f1; border:1px solid #c7eeddff; }
+  .tag.warn{ color:#9a5b06; background:#fff3e0; border:1px solid #ffe0b5; }
+  .tag.bad{ color:#a91b1b; background:#fdeaea; border:1px solid #f8cfcf; }
+  .verdict-head h2{
+    margin:14px 0 0; font-size:clamp(23px,5vw,32px); line-height:1.28;
+    letter-spacing:-.022em; font-weight:800;
+  }
+  .verdict-head .sub{ margin:8px 0 0; font-size:14px; color:var(--ink-2); }
+
+  .score-row{
+    display:flex; align-items:center; justify-content:center; gap:clamp(18px,5vw,40px);
+    flex-wrap:wrap; margin-top:22px;
+  }
+  .ring-wrap{ position:relative; width:132px; height:132px; flex:0 0 auto; }
+  .ring{ width:100%; height:100%; transform:rotate(-90deg); }
+  .ring circle{ fill:none; stroke-linecap:round; }
+  .ring .bg{ stroke:#eef0f7; stroke-width:11; }
+  .ring .fg{ stroke-width:11; stroke-dasharray:326.73; stroke-dashoffset:326.73; transition:stroke-dashoffset 1.1s cubic-bezier(.22,1,.36,1); }
+  .ring-val{
+    position:absolute; inset:0; display:grid; place-content:center; text-align:center;
+    line-height:1.1;
+  }
+  .ring-val strong{ font-size:27px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .ring-val span{ font-size:11.5px; font-weight:600; color:var(--ink-3); letter-spacing:.06em; }
+  .kpis{ display:flex; gap:clamp(14px,4vw,30px); flex-wrap:wrap; }
+  .kpi{ min-width:74px; }
+  .kpi b{ display:block; font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+  .kpi span{ font-size:12px; color:var(--ink-3); font-weight:600; }
+
+  .legend{ margin-top:24px; display:grid; gap:13px; }
+  .cat-row{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px; }
+  .cat-row .name{ font-size:13.5px; font-weight:650; color:var(--ink-2); white-space:nowrap; }
+  .cat-bar{ height:9px; border-radius:999px; background:#eff1f7; overflow:hidden; }
+  .cat-bar > i{ display:block; height:100%; border-radius:999px; width:0; transition:width .9s cubic-bezier(.22,1,.36,1); }
+  .cat-row .num{ font-size:12.5px; font-weight:700; color:var(--ink-3); font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .diff-strip{
+    display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+    margin-top:18px; padding-top:16px; border-top:1px dashed var(--line);
+    font-size:12.5px; font-weight:600; color:var(--ink-3);
+  }
+  .diff-strip .lead{ margin-right:2px; }
+  .diff-strip span{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 11px; border-radius:9px;
+    background:#f6f7fb; border:1px solid #eaeef7;
+  }
+  .diff-strip b{ color:var(--ink-2); font-weight:750; font-variant-numeric:tabular-nums; }
+
+  .prose{ display:grid; gap:14px; }
+  .prose h3{
+    margin:0; font-size:12.5px; font-weight:750; letter-spacing:.1em;
+    color:var(--ink-3); text-transform:uppercase;
+  }
+  .prose p{ margin:0; font-size:clamp(14px,2.2vw,15.5px); line-height:1.9; color:#33405c; }
+  .prose p strong{ color:var(--ink); font-weight:750; }
+  .callout{
+    margin:0; padding:15px 17px; border-radius:16px;
+    background:#f7f8ff; border:1px solid #e6e7fb;
+    font-size:13.5px; line-height:1.8; color:#45507a;
+  }
+  .callout b{ color:#3b2fd0; }
+
+  .review{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(8px,2vw,14px); }
+  .rev{
+    position:relative; text-align:center;
+    background:#fbfbfe; border:1px solid var(--line); border-radius:14px;
+    padding:9px 6px 8px;
+  }
+  .rev.bad{ background:#fffafa; border-color:#f7d6d6; }
+  .rev canvas{ display:block; width:100%; height:auto; border-radius:50%; margin:0 auto; }
+  .rev .mark{
+    position:absolute; top:6px; right:7px;
+    width:17px; height:17px; border-radius:50%;
+    display:grid; place-content:center;
+    font-size:10px; font-weight:800; color:#fff; line-height:1;
+    background:var(--ok);
+  }
+  .rev.bad .mark{ background:var(--bad); }
+  .rev .cap{ display:block; margin-top:6px; font-size:10.5px; font-weight:650; color:var(--ink-3); line-height:1.35; }
+  .rev .cap b{ color:var(--ink-2); }
+  .rev .cap.bad-cap b{ color:#b91c1c; }
+
+  .actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+  .disclaimer{
+    margin:0; padding:16px 18px;
+    font-size:12.5px; line-height:1.8; color:var(--ink-3);
+    background:rgba(255,255,255,.6); border:1px dashed #d8dded; border-radius:16px;
+  }
+  .disclaimer b{ color:var(--ink-2); }
+
+  .collapsible-head{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    width:100%; appearance:none; border:0; background:none; cursor:pointer;
+    font:inherit; color:var(--ink); padding:0;
+  }
+  .collapsible-head h3{ margin:0; font-size:15px; font-weight:750; letter-spacing:-.01em; }
+  .collapsible-head span{ font-size:12.5px; color:var(--ink-3); font-weight:600; }
+  .collapsible-head .chev{
+    flex:0 0 auto;
+    font-size:13px; line-height:1; color:#8b95a7;
+    padding:6px 9px; border-radius:9px; background:#f0f2f9;
+    transition:transform .25s ease;
+  }
+  #revPanel[data-open="false"] .review,
+  #revPanel[data-open="false"] .rev-body .disclaimer{ display:none; }
+  #revPanel[data-open="false"] .chev{ transform:rotate(-90deg); }
+  .rev-body{ margin-top:16px; }
+
+  @media (max-width:560px){
+    .score-row{ flex-direction:column; gap:20px; }
+    .kpis{
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:8px; width:100%; text-align:center;
+    }
+    .kpi{ min-width:0; }
+    .kpi b{ font-size:17px; }
+    .kpi span{ font-size:11px; }
+  }
+  @media (max-width:640px){
+    .review{ grid-template-columns:repeat(3,1fr); }
+    .notes{ padding:17px 17px; }
+  }
+  @media (max-width:420px){
+    .review{ grid-template-columns:repeat(3,1fr); }
+    .kpis{ gap:16px; }
+    .btn{ padding:15px 22px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= 封面 ================= -->
+  <section class="screen active" id="screen-intro">
+    <div class="hero">
+      <span class="badge"><i></i>色觉自查 · 约 4 分钟 · 24 道题</span>
+      <h1>你看到的数字<br><em>和大家一样吗？</em></h1>
+      <p class="lede">
+        用 24 张石原氏（Ishihara）风格的色点图版，测一测你的红绿与蓝黄色觉。
+        题目<b>由易到难</b>排列：越往后色差越小、数字轮廓越碎，
+        其中 9 张是刻意压低色差的<strong>困难图版</strong>，全靠「第一眼」判断。
+      </p>
+
+      <div class="demo-row">
+        <figure class="demo" style="margin:0">
+          <div class="shot"><canvas id="demoA" width="150" height="150" aria-hidden="true"></canvas></div>
+          <figcaption>红绿图版</figcaption>
+        </figure>
+        <figure class="demo" style="margin:0">
+          <div class="shot"><canvas id="demoB" width="150" height="150" aria-hidden="true"></canvas></div>
+          <figcaption>蓝黄图版</figcaption>
+        </figure>
+        <figure class="demo" style="margin:0">
+          <div class="shot"><canvas id="demoC" width="150" height="150" aria-hidden="true"></canvas></div>
+          <figcaption>对照图版</figcaption>
+        </figure>
+      </div>
+
+      <div class="notes">
+        <h3>开始之前</h3>
+        <ul>
+          <li>请在<b>明亮、不反光</b>的环境作答，屏幕亮度调到舒适水平。</li>
+          <li>保持手机／电脑与眼睛的正常距离，<b>不要眯眼、不要倾斜屏幕</b>。</li>
+          <li>题目<b>由易到难</b>排列：前几题是热身，越往后色差越小、轮廓越碎，需要盯上几秒才浮出来是正常的，别急。</li>
+          <li>每张图版只给你 <b>4 个数字选项</b>，看不清也请选一个最接近的。</li>
+          <li>结果只反映<b>此刻这块屏幕上的辨识表现</b>，不能代替医学诊断。</li>
+        </ul>
+      </div>
+
+      <div class="cta">
+        <button class="btn btn-primary" id="btnStart" type="button">开始测试 →</button>
+        <p class="fine">共 24 题 · 全部答完才会出结果</p>
+      </div>
+    </div>
+
+    <p class="disclaimer" style="margin-top:30px">
+      <b>免责声明：</b>本页面为面向学生与教师的科普 / 筛查工具，图版由程序按石原氏配色原理生成，非医用标准图册。
+      任何结论都不构成医学诊断；若结果提示异常，或涉及体检、报考、职业准入等正式用途，请到眼科使用标准图册或
+      Farnsworth-Munsell、D-15 色相排列等检查确认。
+    </p>
+  </section>
+
+  <!-- ================= 答题 ================= -->
+  <section class="screen" id="screen-quiz">
+    <div class="quiz">
+      <div class="quiz-head">
+        <div class="track"><i id="bar"></i></div>
+        <div class="meta-row">
+          <span id="qMeta">第 1 / 24 题</span>
+          <span class="lv-chip lv1" id="qLevel">简单</span>
+          <span class="clock" id="clock">00:00</span>
+        </div>
+      </div>
+
+      <div class="shot" id="plateWrap">
+        <canvas id="plate" aria-label="色点测试图版"></canvas>
+      </div>
+
+      <div class="ask">
+        <h2>你看到了什么数字？</h2>
+        <p>选出第一眼看到的那个，不要反复猜测</p>      </div>
+
+      <div class="options" id="options" role="group" aria-label="答案选项"></div>
+      <p class="hint">看不清也请选一个 · 可用键盘 <b>1 – 4</b> 直接作答</p>
+    </div>
+  </section>
+
+  <!-- ================= 结果 ================= -->
+  <section class="screen" id="screen-result">
+    <div class="result">
+
+      <div class="panel">
+        <div class="verdict-head">
+          <span class="tag" id="verdictTag">评测结果</span>
+          <h2 id="verdictTitle">—</h2>
+          <p class="sub" id="verdictSub">—</p>
+        </div>
+
+        <div class="score-row">
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="bg" cx="60" cy="60" r="52"></circle>
+              <circle class="fg" id="ringFg" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div class="ring-val">
+              <strong id="accVal">0%</strong>
+              <span>正确率</span>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><b id="kpiRight">0</b><span>答对题数</span></div>
+            <div class="kpi"><b id="kpiWrong">0</b><span>答错题数</span></div>
+            <div class="kpi"><b id="kpiTime">00:00</b><span>总用时</span></div>
+            <div class="kpi"><b id="kpiAvg">0.0s</b><span>平均每题</span></div>
+          </div>
+        </div>
+
+        <div class="legend" id="legend"></div>
+        <div class="diff-strip" id="diffStrip"></div>
+      </div>
+
+      <div class="panel prose" id="prose"></div>
+
+      <div class="panel" id="revPanel" data-open="true">
+        <button class="collapsible-head" id="revToggle" type="button" aria-expanded="true">
+          <h3>逐题回顾<span> · 共 <span id="revCount">24</span> 张图版</span></h3>
+          <span class="chev">▾</span>
+        </button>
+        <div class="rev-body" id="revBody" style="margin-top:16px">
+          <div class="review" id="review"></div>
+          <p class="disclaimer" style="margin-top:16px">
+            回顾里的小图与原图配色一致，但缩小后细节会丢失，仅用于对照「当时看到的是哪张图」。
+          </p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="btnAgain" type="button">再测一次（重新出题）</button>
+        <button class="btn btn-ghost" id="btnCopy" type="button">复制结果文字</button>
+      </div>
+
+      <p class="disclaimer">
+        <b>再次提醒：</b>屏幕色彩校正、环境光、显示器色域都会影响判读，本测试只能作为「是否需要进一步检查」的参考。
+        红绿色觉异常在男性中约占 8%、女性中约 0.5%，绝大多数人自己并不知道；
+        即使测出异常，也不影响正常学习与生活，只在少数对颜色要求严格的场景（如部分体检、电气与化工岗位、飞行相关）需要注意。
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= 基础工具 ================= */
+  var TAU = Math.PI * 2;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var pad2 = function (n) { return String(n).padStart(2, '0'); };
+  var fmtDur = function (ms) {
+    var s = Math.max(0, Math.round(ms / 1000));
+    return pad2(Math.floor(s / 60)) + ':' + pad2(s % 60);
+  };
+
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function shuffle(arr, rng) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(rng() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  function hsvToRgb(h, s, v) {
+    h = ((h % 360) + 360) % 360;
+    var c = v * s;
+    var hp = h / 60;
+    var x = c * (1 - Math.abs((hp % 2) - 1));
+    var m = v - c;
+    var r = 0, g = 0, b = 0;
+    if (hp < 1) { r = c; g = x; }
+    else if (hp < 2) { r = x; g = c; }
+    else if (hp < 3) { g = c; b = x; }
+    else if (hp < 4) { g = x; b = c; }
+    else if (hp < 5) { r = x; b = c; }
+    else { r = c; b = x; }
+    return [
+      Math.round((r + m) * 255),
+      Math.round((g + m) * 255),
+      Math.round((b + m) * 255)
+    ];
+  }
+
+  /* ================= 配色方案 =================
+     每组都让「数字色」和「底色」在明度上尽量接近，
+     只靠色相区分 —— 这正是石原氏图版的关键。          */
+  var SCHEMES = {
+    rgA: { cat: 'rg', label: '红绿',
+      fig: { h: [2, 24],   s: [.66, .88], v: [.78, .93] },
+      bg:  { h: [74, 140], s: [.34, .56], v: [.50, .62] } },
+    rgB: { cat: 'rg', label: '红绿',
+      fig: { h: [86, 148], s: [.36, .56], v: [.63, .78] },
+      bg:  { h: [8, 32],   s: [.60, .84], v: [.82, .95] } },
+    by:  { cat: 'by', label: '蓝黄',
+      fig: { h: [46, 62],  s: [.72, .94], v: [.80, .94] },
+      bg:  { h: [198, 236], s: [.42, .60], v: [.68, .82] } },
+    ctrl:{ cat: 'ctrl', label: '对照',
+      fig: { h: [224, 248], s: [.48, .68], v: [.15, .27] },
+      bg:  { h: [40, 54],   s: [.16, .28], v: [.92, .99] } }
+  };
+
+  /* ================= 图版绘制 ================= */
+  var maskCache = new Map();
+
+  /* 三档难度。数字颜色与底色越接近、伪装点越多、数字边界越碎，图版就越难。
+     hueKeep —— 保留原色相差的比例（越小越接近底色）
+     satKeep —— 数字饱和度系数（越低越灰）
+     camo    —— 伪装点比例（数字内混底色、底色中混数字色）
+     fuzz    —— 边界打散强度（边缘圆点随机归色，破坏轮廓）
+     dotK    —— 圆点大小系数（越大越难看清形状）
+     weight / fontK —— 笔画粗细与字号
+     vPad    —— 明度抖动幅度（制造假明暗边缘，不能靠亮度猜） */
+  var LEVELS = {
+    1: { hueKeep: 1.00, satKeep: 1.00, camo: 0.030, fuzz: 0.08, dotK: 1.00,
+         weight: 800, fontK: 1.00, vPad: 0.000, shrink: 0.62 },
+    2: { hueKeep: 0.88, satKeep: 0.96, camo: 0.065, fuzz: 0.24, dotK: 1.04,
+         weight: 750, fontK: 0.98, vPad: 0.040, shrink: 0.66 },
+    3: { hueKeep: 0.78, satKeep: 0.93, camo: 0.105, fuzz: 0.34, dotK: 1.09,
+         weight: 700, fontK: 0.95, vPad: 0.065, shrink: 0.78 }
+  };
+
+  function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+  function pullHue(h, target, keep) {
+    var d = ((target - h + 540) % 360) - 180;
+    return h + d * (1 - keep);
+  }
+
+  function maskAt(mask, S, x, y) {
+    if (x < 0) x = 0; else if (x >= S) x = S - 1;
+    if (y < 0) y = 0; else if (y >= S) y = S - 1;
+    return mask[y * S + x];
+  }
+
+  function relLum(rgb) {
+    var f = function (c) {
+      c = c / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+  }
+
+  /* 固定的采样参数，用来估算一个色族（h/s/v 三个区间）的平均相对亮度 */
+  var LUM_SAMPLES = (function () {
+    var r = mulberry32(0xA11CE);
+    var out = [];
+    for (var i = 0; i < 48; i++) out.push([r(), r(), r()]);
+    return out;
+  })();
+
+  function palLum(pal) {
+    var s = 0;
+    for (var i = 0; i < LUM_SAMPLES.length; i++) {
+      var p = LUM_SAMPLES[i];
+      s += relLum(hsvToRgb(
+        pal.h[0] + p[0] * (pal.h[1] - pal.h[0]),
+        pal.s[0] + p[1] * (pal.s[1] - pal.s[0]),
+        pal.v[0] + p[2] * (pal.v[1] - pal.v[0])
+      ));
+    }
+    return s / LUM_SAMPLES.length;
+  }
+
+  /* 按难度生成两族配色，并把红绿图版的明度自动配平 —— 
+     这样色觉异常者无法靠「谁更亮」把数字挑出来，只能靠色相，测试才成立。 */
+  var palCache = {};
+  function palettesFor(schemeId, lv) {
+    var key = schemeId + '|' + lv;
+    if (palCache[key]) return palCache[key];
+
+    var cfg = LEVELS[lv] || LEVELS[1];
+    var sch = SCHEMES[schemeId];
+    var bgHueMid = (sch.bg.h[0] + sch.bg.h[1]) / 2;
+
+    // 只有红绿图版需要「把数字色往底色方向拉」；蓝黄图版拉过头会变成绿色，
+    // 跑偏到红绿轴上，反而测不出蓝黄色觉，所以只靠伪装点与边界打散增加难度。
+    var isRG = sch.cat === 'rg';
+    var hueKeep = isRG ? cfg.hueKeep : 1;
+    var satKeep = isRG ? cfg.satKeep : 1;
+
+    var palBg = {
+      h: sch.bg.h.slice(),
+      s: sch.bg.s.slice(),
+      v: [clamp01(sch.bg.v[0] - cfg.vPad), clamp01(sch.bg.v[1] + cfg.vPad)]
+    };
+    var palFig = {
+      h: sch.fig.h.map(function (v) { return pullHue(v, bgHueMid, hueKeep); }),
+      s: sch.fig.s.map(function (v) { return v * satKeep; }),
+      v: [clamp01(sch.fig.v[0] - cfg.vPad), clamp01(sch.fig.v[1] + cfg.vPad)]
+    };
+
+    // 只有红绿图版需要配平明度；蓝黄与对照图版保留原有明暗差
+    if (isRG) {
+      var target = palLum(palBg);
+      var v0 = palFig.v[0], v1 = palFig.v[1];
+      var lo = -0.55, hi = 0.35;
+      for (var i = 0; i < 28; i++) {
+        var mid = (lo + hi) / 2;
+        palFig.v = [clamp01(v0 + mid), clamp01(v1 + mid)];
+        if (palLum(palFig) < target) lo = mid; else hi = mid;
+      }
+      palFig.v = [clamp01(v0 + lo), clamp01(v1 + lo)];
+    }
+
+    var out = { fig: palFig, bg: palBg };
+    palCache[key] = out;
+    return out;
+  }
+
+  function digitMask(S, text, weight, fontK) {
+    var key = S + '|' + text + '|' + weight + '|' + fontK;
+    var hit = maskCache.get(key);
+    if (hit) return hit;
+
+    var cv = document.createElement('canvas');
+    cv.width = S; cv.height = S;
+    var c = cv.getContext('2d', { willReadFrequently: true });
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillStyle = '#fff';
+
+    var fontOf = function (size) {
+      return weight + ' ' + size + 'px "Segoe UI","Helvetica Neue",Arial,"PingFang SC",sans-serif';
+    };
+    var fs = S * (text.length > 1 ? 0.46 : 0.62) * fontK;
+    c.font = fontOf(fs);
+    var maxW = S * 0.72;
+    var w = c.measureText(text).width;
+    if (w > maxW) {
+      fs = fs * maxW / w;
+      c.font = fontOf(fs);
+    }
+    c.fillText(text, S / 2, S / 2 + fs * 0.02);
+
+    var data = c.getImageData(0, 0, S, S).data;
+    var alpha = new Uint8Array(S * S);
+    for (var i = 0, n = alpha.length; i < n; i++) alpha[i] = data[i * 4 + 3];
+    maskCache.set(key, alpha);
+    return alpha;
+  }
+
+  function randIn(rng, range) {
+    return range[0] + rng() * (range[1] - range[0]);
+  }
+
+  function renderPlate(ctx, S, text, schemeId, seed, level) {
+    var lv = level || 1;
+    var cfg = LEVELS[lv] || LEVELS[1];
+    var rng = mulberry32(((seed >>> 0) ^ Math.imul(lv, 0x9E3779B1)) >>> 0);
+    var mask = digitMask(S, text, cfg.weight, cfg.fontK);
+    var pal = palettesFor(schemeId, lv);
+    var palFig = pal.fig, palBg = pal.bg;
+    var cx = S / 2, cy = S / 2, R = S / 2;
+
+    ctx.clearRect(0, 0, S, S);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, R - 0.5, 0, TAU);
+    ctx.clip();
+
+    // 底色打底，避免圆点间缝隙出现白线
+    var baseRgb = hsvToRgb(
+      (palBg.h[0] + palBg.h[1]) / 2,
+      (palBg.s[0] + palBg.s[1]) / 2,
+      (palBg.v[0] + palBg.v[1]) / 2
+    );
+    ctx.fillStyle = 'rgb(' + baseRgb[0] + ',' + baseRgb[1] + ',' + baseRgb[2] + ')';
+    ctx.fillRect(0, 0, S, S);
+
+    var base = S * 0.0126 * cfg.dotK;
+    var stepX = base * 1.72;
+    var stepY = stepX * 0.866;
+    var LIMIT = (R + base * 3) * (R + base * 3);
+    var row = 0;
+
+    for (var y = stepY * 0.3; y < S + stepY; y += stepY, row++) {
+      for (var x = stepX * 0.3 + (row % 2 ? stepX * 0.5 : 0); x < S + stepX; x += stepX) {
+        var px = x + (rng() - 0.5) * stepX * 0.52;
+        var py = y + (rng() - 0.5) * stepY * 0.56;
+        var r = base * (0.66 + rng() * 0.66);
+        if (rng() < 0.015) continue;
+
+        var dx = px - cx, dy = py - cy;
+        if (dx * dx + dy * dy > LIMIT) continue;
+
+        var mx = Math.round(px), my = Math.round(py);
+        var inside = maskAt(mask, S, mx, my) > 118;
+
+        // 边界判定：圆点四周的取样若与中心不一致，说明它压在数字轮廓上
+        var edge = false;
+        if (cfg.fuzz > 0) {
+          var nr = Math.max(1, Math.round(r * 0.9));
+          edge = (maskAt(mask, S, mx - nr, my) > 118) !== inside ||
+                 (maskAt(mask, S, mx + nr, my) > 118) !== inside ||
+                 (maskAt(mask, S, mx, my - nr) > 118) !== inside ||
+                 (maskAt(mask, S, mx, my + nr) > 118) !== inside;
+        }
+        if (edge && rng() < cfg.fuzz) inside = rng() < 0.5;
+
+        var pal = inside ? palFig : palBg;
+        if (!edge && rng() < cfg.camo) {
+          pal = inside ? palBg : palFig;   // 伪装点
+          r = r * cfg.shrink;
+        }
+
+        var rgb = hsvToRgb(randIn(rng, pal.h), randIn(rng, pal.s), randIn(rng, pal.v));
+        ctx.fillStyle = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+        ctx.beginPath();
+        ctx.arc(px, py, r, 0, TAU);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  function paintCanvas(canvas, cssSize, text, schemeId, seed, level) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    var S = Math.max(48, Math.round(cssSize * dpr));
+    canvas.width = S;
+    canvas.height = S;
+    canvas.style.width = cssSize + 'px';
+    canvas.style.height = cssSize + 'px';
+    renderPlate(canvas.getContext('2d'), S, text, schemeId, seed, level);
+  }
+
+  /* ================= 出题 ================= */
+  var POOL_RG = ['12', '8', '6', '29', '57', '5', '3', '15', '74', '2', '97', '45',
+                 '7', '16', '73', '26', '42', '35', '96', '4', '9', '68', '1', '0'];
+  var POOL_BY = ['5', '7', '3', '8', '2', '6', '4', '9', '26', '15'];
+  var POOL_CTRL = ['6', '8', '3', '5', '2', '7', '4', '9', '1', '12'];
+
+  var CONFUSE = { '0': '8', '1': '7', '2': '3', '3': '8', '4': '1',
+                  '5': '6', '6': '5', '7': '1', '8': '6', '9': '4' };
+
+  function mutate(num, rng) {
+    var d = num.split('');
+    var i = Math.floor(rng() * d.length);
+    if (rng() < 0.58) {
+      d[i] = CONFUSE[d[i]] || d[i];
+    } else if (d.length === 2 && rng() < 0.34) {
+      return d[1] + d[0];
+    } else {
+      d[i] = String(Math.floor(rng() * 10));
+    }
+    var out = d.join('');
+    return (/^0./.test(out) ? null : out);
+  }
+
+  function makeOptions(answer, rng) {
+    var set = [answer];
+    var guard = 0;
+    while (set.length < 4 && guard++ < 300) {
+      var cand = mutate(answer, rng);
+      if (cand && cand !== answer && cand.length === answer.length && set.indexOf(cand) < 0) {
+        set.push(cand);
+      }
+    }
+    guard = 0;
+    while (set.length < 4 && guard++ < 300) {
+      var len = answer.length;
+      var lo = len === 1 ? 0 : 10;
+      var hi = len === 1 ? 9 : 99;
+      var rnd = String(lo + Math.floor(rng() * (hi - lo + 1)));
+      if (rnd !== answer && set.indexOf(rnd) < 0) set.push(rnd);
+    }
+    return shuffle(set, rng);
+  }
+
+  function buildQuestions(seed) {
+    var rng = mulberry32(seed);
+    var easy = [], mid = [], hard = [];
+    var push = function (bucket, q) { bucket.push(q); };
+
+    // 18 道红绿题：1 简单 + 9 中等 + 8 困难（简单题只留一道做过渡，主力放在中等档）
+    var rgCount = { 1: 1, 2: 9, 3: 8 };
+    var rgPool = shuffle(POOL_RG.slice(), rng);
+    var ri = 0;
+    [1, 2, 3].forEach(function (lv) {
+      for (var n = 0; n < rgCount[lv]; n++) {
+        push(lv === 1 ? easy : (lv === 2 ? mid : hard), {
+          cat: 'rg',
+          scheme: rng() < 0.58 ? 'rgA' : 'rgB',
+          text: rgPool[ri++ % rgPool.length],
+          level: lv,
+          seed: (rng() * 4294967296) >>> 0
+        });
+      }
+    });
+
+    // 3 道蓝黄题（补充提示蓝黄色觉）：2 中等 + 1 困难
+    var byPlan = [2, 2, 3];
+    var byPool = shuffle(POOL_BY.slice(), rng);
+    for (var j = 0; j < byPlan.length; j++) {
+      var lvB = byPlan[j];
+      push(lvB === 1 ? easy : (lvB === 2 ? mid : hard), {
+        cat: 'by', scheme: 'by', text: byPool[j],
+        level: lvB, seed: (rng() * 4294967296) >>> 0
+      });
+    }
+
+    // 3 道高对比度对照题（检验环境与注意力是否可靠，永远用最简单的画法）
+    var ctrlPool = shuffle(POOL_CTRL.slice(), rng);
+    var ctrls = [];
+    for (var k = 0; k < 3; k++) {
+      ctrls.push({
+        cat: 'ctrl', scheme: 'ctrl', text: ctrlPool[k],
+        level: 1, seed: (rng() * 4294967296) >>> 0
+      });
+    }
+
+    // 整体由易到难：简单块 → 中等块 → 困难块，块内随机；
+    // 简单块第一题固定为对照图版，作为示范与暖场
+    var demo = ctrls[0];
+    var easyBlock = [demo].concat(shuffle(easy.concat(ctrls.slice(1)), rng));
+    var qs = easyBlock.concat(shuffle(mid, rng), shuffle(hard, rng));
+
+    qs.forEach(function (q) {
+      q.answer = q.text;
+      q.options = makeOptions(q.text, rng);
+    });
+    return qs;
+  }
+
+  /* ================= 状态与流程 ================= */
+  var state = {
+    qs: [], idx: 0, answers: [],
+    locked: false, startedAt: 0, finishedAt: 0, qStart: 0,
+    tick: null, screen: 'intro'
+  };
+
+  var elView = {
+    intro: $('#screen-intro'),
+    quiz: $('#screen-quiz'),
+    result: $('#screen-result')
+  };
+
+  function showScreen(name) {
+    Object.keys(elView).forEach(function (k) {
+      elView[k].classList.toggle('active', k === name);
+    });
+    state.screen = name;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function plateCssSize() {
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var size = Math.min(vw * 0.82, vh * 0.46, 430);
+    return Math.max(230, Math.round(size));
+  }
+
+  function updateHead() {
+    var total = state.qs.length;
+    $('#qMeta').textContent = '第 ' + Math.min(state.idx + 1, total) + ' / ' + total + ' 题';
+    $('#bar').style.width = (state.answers.length / total * 100).toFixed(2) + '%';
+
+    var q = state.qs[state.idx];
+    var chip = $('#qLevel');
+    if (q && chip) {
+      var names = { 1: '简单', 2: '中等', 3: '困难' };
+      chip.textContent = names[q.level] || '简单';
+      chip.className = 'lv-chip lv' + (q.level || 1);
+    }
+  }
+
+  function paintCurrent() {
+    var q = state.qs[state.idx];
+    if (!q) return;
+    paintCanvas($('#plate'), plateCssSize(), q.text, q.scheme, q.seed, q.level);
+  }
+
+  function renderOptions() {
+    var q = state.qs[state.idx];
+    var box = $('#options');
+    box.innerHTML = '';
+    q.options.forEach(function (opt) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.textContent = opt;
+      b.dataset.value = opt;
+      b.addEventListener('click', function () { choose(opt, b); });
+      box.appendChild(b);
+    });
+  }
+
+  function renderQuestion() {
+    updateHead();
+    paintCurrent();
+    renderOptions();
+    state.qStart = performance.now();
+    state.locked = false;
+  }
+
+  function startTest() {
+    var seed = ((Date.now() & 0x7fffffff) ^ (Math.random() * 0x7fffffff)) >>> 0;
+    state.qs = buildQuestions(seed);
+    state.idx = 0;
+    state.answers = [];
+    state.locked = false;
+    state.startedAt = Date.now();
+    state.finishedAt = 0;
+    showScreen('quiz');
+    renderQuestion();
+    if (state.tick) clearInterval(state.tick);
+    state.tick = setInterval(function () {
+      $('#clock').textContent = fmtDur(Date.now() - state.startedAt);
+    }, 500);
+    $('#clock').textContent = '00:00';
+  }
+
+  function choose(value, btn) {
+    if (state.locked) return;
+    state.locked = true;
+
+    var q = state.qs[state.idx];
+    var ok = value === q.answer;
+    state.answers.push({
+      cat: q.cat, scheme: q.scheme, text: q.text, seed: q.seed, level: q.level,
+      answer: q.answer, chose: value, correct: ok,
+      ms: performance.now() - state.qStart
+    });
+
+    if (btn) btn.classList.add('picked');
+    $('#bar').style.width = (state.answers.length / state.qs.length * 100).toFixed(2) + '%';
+
+    setTimeout(function () {
+      state.idx++;
+      if (state.idx >= state.qs.length) {
+        finish();
+      } else {
+        renderQuestion();
+      }
+    }, 290);
+  }
+
+  /* ================= 结果计算 ================= */
+  function finish() {
+    if (state.tick) { clearInterval(state.tick); state.tick = null; }
+    state.finishedAt = Date.now();   // 固化结束时刻，避免复制结果时用时被重新计算
+    renderResult();
+  }
+
+  function evaluate() {
+    var ans = state.answers;
+    var total = ans.length;
+    var correct = ans.filter(function (a) { return a.correct; }).length;
+    var countErr = function (c) {
+      return ans.filter(function (a) { return a.cat === c && !a.correct; }).length;
+    };
+    var countAll = function (c) {
+      return ans.filter(function (a) { return a.cat === c; }).length;
+    };
+
+    var rgErr = countErr('rg');
+    var byErr = countErr('by');
+    var ctrlErr = countErr('ctrl');
+    var elapsed = (state.finishedAt || Date.now()) - state.startedAt;
+    var acc = total ? correct / total : 0;
+
+    // 按难度统计：困难图版的表现是判断严重程度的重要旁证
+    var lv = { 1: { n: 0, e: 0 }, 2: { n: 0, e: 0 }, 3: { n: 0, e: 0 } };
+    ans.forEach(function (a) {
+      var L = lv[a.level] || lv[1];
+      L.n++;
+      if (!a.correct) L.e++;
+    });
+    var easyErr = ans.filter(function (a) {
+      return a.cat !== 'ctrl' && a.level === 1 && !a.correct;
+    }).length;
+    var hardRight = lv[3].n - lv[3].e;
+
+    var level, tone, title, sub;
+    if (ctrlErr >= 2) {
+      level = 'invalid'; tone = 'warn';
+      title = '这次结果不太可靠，建议重测';
+      sub = '对照题出现 ' + ctrlErr + ' 次错误 —— 更可能来自环境或设备问题';
+    } else if (rgErr <= 3) {
+      level = 'normal'; tone = 'ok';
+      title = '你的红绿色觉表现正常';
+      sub = '18 道红绿图版中答错 ' + rgErr + ' 道，困难图版答对 ' + hardRight + '/' + lv[3].n;
+    } else if (rgErr <= 7) {
+      level = 'mild'; tone = 'warn';
+      title = '可能存在轻度红绿色弱倾向';
+      sub = '18 道红绿图版中答错 ' + rgErr + ' 道，困难图版错得比较集中';
+    } else if (rgErr <= 12) {
+      level = 'moderate'; tone = 'bad';
+      title = '红绿色觉异常的可能性较大';
+      sub = '18 道红绿图版中答错 ' + rgErr + ' 道，建议做进一步检查';
+    } else {
+      level = 'strong'; tone = 'bad';
+      title = '红绿色觉明显异常';
+      sub = '18 道红绿图版中答错 ' + rgErr + ' 道，多数图版未能辨认';
+    }
+
+    return {
+      total: total, correct: correct, wrong: total - correct,
+      acc: acc, elapsed: elapsed, avg: total ? elapsed / total : 0,
+      rgErr: rgErr, byErr: byErr, ctrlErr: ctrlErr,
+      rgN: countAll('rg'), byN: countAll('by'), ctrlN: countAll('ctrl'),
+      lv: lv, easyErr: easyErr, hardRight: hardRight,
+      level: level, tone: tone, title: title, sub: sub
+    };
+  }
+
+  function verdictParagraphs(r) {
+    var P = [];
+
+    if (r.level === 'invalid') {
+      P.push('你在 3 道<b>高对比度对照题</b>中答错了 ' + r.ctrlErr + ' 道。这类图版的数字与底色明暗差别极大，' +
+        '即使有色觉异常的人也应该一眼读出，出错通常说明<strong>屏幕偏色、环境光太暗或太亮、屏幕反光，又或是作答时分心了</strong>。' +
+        '因此这次的红绿判读结果不具备参考价值。');
+      P.push('建议换到光线均匀的房间里，把屏幕亮度调到 60%–80%、关闭护眼模式与夜间模式，休息几分钟后重新测一次。' +
+        '如果换过设备、重测后对照题仍然出错，再考虑其他原因。');
+      return P;
+    }
+
+    if (r.level === 'normal') {
+      var rgPhrase = r.rgErr === 0 ? '红绿图版<b>全部答对</b>' : '红绿图版只答错 ' + r.rgErr + ' 道';
+      P.push('24 道题里你答对了 <strong>' + r.correct + ' 道</strong>，正确率 ' + (r.acc * 100).toFixed(1) + '%，平均每题用 ' +
+        (r.avg / 1000).toFixed(1) + ' 秒。' + rgPhrase + '，其中难度最高的 <b>9 道困难图版答对 ' + r.hardRight +
+        ' 道</b>，对照题' + (r.ctrlErr === 0 ? '全部答对' : '只错 ' + r.ctrlErr + ' 道') +
+        '。这说明即使在刻意压低色差、打散轮廓的图版上，你依然能把数字从底色里分出来。' +
+        (r.byErr >= 2 ? '不过蓝黄色觉那边有 ' + r.byErr + ' 道失误，可以留意一下。' : '蓝黄色觉也没有明显异常。'));
+      P.push('从筛查角度看，你的色觉与正常色觉者一致，日常学习、看图、看信号灯都不必担心。' +
+        '需要注意的是，屏幕测试的分辨力仍不如纸质标准图册；如果你在某些场合（例如体检、看配色图、分辨深色线缆）自我感觉吃力，可以去做一次正式检查。');
+      return P;
+    }
+
+    // 红绿色弱 / 色盲倾向
+    var degree = r.level === 'mild' ? '轻度' : (r.level === 'moderate' ? '中度' : '明显');
+    P.push('24 道题你答对了 <strong>' + r.correct + ' 道</strong>（正确率 ' + (r.acc * 100).toFixed(1) + '%），' +
+      '其中 <b>18 道红绿图版答错了 ' + r.rgErr + ' 道</b>，而对高对比度的对照题答错了 ' + r.ctrlErr + ' 道。' +
+      '这个「对照题几乎全对、红绿图版大量出错」的组合，正是' + degree + '红绿色觉异常的典型表现——' +
+      '你能看清明暗和形状，只是在<strong>红与绿之间的色相差别</strong>上分辨力较弱。');
+    P.push(r.easyErr === 0
+      ? '从难度分布看，你的错误集中在<b>中等和困难图版</b>上（简单图版一题没错，困难图版 ' + r.lv[3].n +
+        ' 道只答对 ' + r.hardRight + ' 道）。也就是说，色差被放大的图版你还能勉强认出来，' +
+        '一旦数字色与底色靠近、轮廓被打散，数字就从视线里消失了——这正是色觉异常者看真实图册时的典型体验。'
+      : '从难度分布看，连专门放大色差的<b>简单图版</b>你也答错了，困难图版 ' + r.lv[3].n +
+        ' 道里只答对 ' + r.hardRight + ' 道。错误已经波及最基础的图版，说明辨色差异比较明显。');
+    P.push(r.level === 'mild'
+      ? '轻度色弱的人往往自己毫无察觉：从小习惯了用自己的方式认颜色，只是偶尔觉得「这两个颜色好像差不多」。' +
+        '这类情况通常不影响生活，但在需要快速分辨红绿的信息里（交通信号、电路板色环、地图配色、化学试纸比色）可能会慢半拍。'
+      : '这种程度的红绿色觉差异，通常意味着日常中有些配色对你来说几乎是同一个颜色。' +
+        '好消息是绝大多数红绿色觉异常者视力完全正常，只是辨色维度少了一部分，通过记住位置、亮度、形状等替代线索，' +
+        '完全可以正常学习和工作。');
+    P.push('建议：<b>① </b>到眼科或体检机构用标准石原氏图册、D-15 色相排列做一次正式检查，拿到明确结论；' +
+      '<b>② </b>如果是为了报考、驾照、职业准入，请以医院出具的结果为准，网页测试不能作为依据；' +
+      '<b>③ </b>在需要辨色的场合借助工具（如取色 App、让同伴确认），比反复猜测更可靠。');
+
+    if (r.byErr >= 2) {
+      P.push('另外，你在 3 道<b>蓝黄图版</b>中答错了 ' + r.byErr + ' 道。蓝黄色觉异常（tritan）比红绿色觉异常罕见得多，' +
+        '少量失误也可能只是这几张图对比度偏低或作答过快造成的；如果反复测都是这个结果，值得向医生提一句。');
+    }
+    return P;
+  }
+
+  /* 先渲染初始状态，再写入终值以触发 CSS 过渡；
+     同时用 setTimeout 兜底，避免 rAF 在某些环境下不触发导致进度条空白 */
+  function progressTo(fn) {
+    var done = false;
+    var run = function () { if (done) return; done = true; fn(); };
+    requestAnimationFrame(function () { requestAnimationFrame(run); });
+    setTimeout(run, 320);
+  }
+
+  function renderResult() {
+    var r = evaluate();
+    var toneClass = r.tone;
+
+    var tag = $('#verdictTag');
+    tag.className = 'tag ' + toneClass;
+    tag.textContent = r.level === 'invalid' ? '需重测'
+      : (r.level === 'normal' ? '筛查通过' : '建议进一步检查');
+
+    $('#verdictTitle').textContent = r.title;
+    $('#verdictSub').textContent = r.sub;
+
+    $('#accVal').textContent = (r.acc * 100).toFixed(1) + '%';
+    $('#kpiRight').textContent = r.correct + ' / ' + r.total;
+    $('#kpiWrong').textContent = String(r.wrong);
+    $('#kpiTime').textContent = fmtDur(r.elapsed);
+    $('#kpiAvg').textContent = (r.avg / 1000).toFixed(1) + 's';
+
+    var ringColor = r.level === 'normal' ? '#0f9d76'
+      : (r.level === 'invalid' || r.level === 'mild' ? '#e0910b' : '#dc2626');
+    var fg = $('#ringFg');
+    fg.style.stroke = ringColor;
+    fg.style.strokeDashoffset = String(326.73);
+    progressTo(function () {
+      fg.style.strokeDashoffset = String(326.73 * (1 - r.acc));
+    });
+
+    // 分类条形
+    var rows = [
+      { key: '红绿图版', n: r.rgN, err: r.rgErr, color: 'linear-gradient(90deg,#ef4444,#f97316)' },
+      { key: '蓝黄图版', n: r.byN, err: r.byErr, color: 'linear-gradient(90deg,#3b82f6,#22c55e)' },
+      { key: '对照图版', n: r.ctrlN, err: r.ctrlErr, color: 'linear-gradient(90deg,#8b5cf6,#6366f1)' }
+    ];
+    var legend = $('#legend');
+    legend.innerHTML = '';
+    rows.forEach(function (row) {
+      var good = row.n ? (row.n - row.err) / row.n : 0;
+      var wrap = document.createElement('div');
+      wrap.className = 'cat-row';
+      wrap.innerHTML =
+        '<span class="name">' + row.key + '</span>' +
+        '<div class="cat-bar"><i style="background:' + row.color + '"></i></div>' +
+        '<span class="num">' + (row.n - row.err) + '/' + row.n + '</span>';
+      legend.appendChild(wrap);
+      var bar = wrap.querySelector('i');
+      progressTo(function () {
+        bar.style.width = (good * 100).toFixed(1) + '%';
+      });
+    });
+
+    // 难度分布（困难图版的表现最能说明问题）
+    var names = { 1: '简单', 2: '中等', 3: '困难' };
+    var diffHtml = '<em class="lead">图版难度</em>';
+    [1, 2, 3].forEach(function (k) {
+      var L = r.lv[k];
+      if (!L || !L.n) return;
+      diffHtml += '<span>' + names[k] + ' <b>' + (L.n - L.e) + '/' + L.n + '</b></span>';
+    });
+    $('#diffStrip').innerHTML = diffHtml;
+
+    // 评价正文
+    var prose = $('#prose');
+    prose.innerHTML = '<h3>评估与建议</h3>';
+    verdictParagraphs(r).forEach(function (txt) {
+      var p = document.createElement('p');
+      p.innerHTML = txt;
+      prose.appendChild(p);
+    });
+
+    var callout = document.createElement('p');
+    callout.className = 'callout';
+    callout.innerHTML = '<b>关于本测试的边界：</b>程序生成的图版与医用石原氏图册在色值、印刷网点、对比度上都有差别，' +
+      '它适合用来<b>提示风险</b>，不适合用来<b>下诊断</b>。真正的色觉检查由眼科医生在标准光源下、用标准图册完成。';
+    prose.appendChild(callout);
+
+    // 逐题回顾
+    renderReview(r);
+    showScreen('result');
+  }
+
+  function renderReview() {
+    var box = $('#review');
+    box.innerHTML = '';
+    $('#revCount').textContent = String(state.answers.length);
+
+    var label = { rg: '红绿', by: '蓝黄', ctrl: '对照' };
+    var lvLabel = { 1: '简', 2: '中', 3: '难' };
+
+    // 按答题顺序展示，正好对应「由易到难」的推进过程
+    state.answers.forEach(function (item, i) {
+      var cell = document.createElement('div');
+      cell.className = 'rev' + (item.correct ? '' : ' bad');
+
+      var cv = document.createElement('canvas');
+      var size = 150;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = size * dpr;
+      cv.height = size * dpr;
+      cv.style.width = '100%';
+      renderPlate(cv.getContext('2d'), cv.width, item.text, item.scheme, item.seed, item.level);
+      cell.appendChild(cv);
+
+      var mark = document.createElement('span');
+      mark.className = 'mark';
+      mark.textContent = item.correct ? '✓' : '✗';
+      cell.appendChild(mark);
+
+      var cap = document.createElement('span');
+      cap.className = 'cap' + (item.correct ? '' : ' bad-cap');
+      cap.innerHTML = '<b>' + label[item.cat] + '·' + (lvLabel[item.level] || '简') + '</b> ' +
+        (item.correct ? '✓ ' + item.answer : '选' + item.chose + '·答' + item.answer);
+      cell.appendChild(cap);
+
+      cell.title = '第 ' + (i + 1) + ' 题 · ' + label[item.cat] + '图版 · 正确答案 ' + item.answer +
+        (item.correct ? '' : ' · 你选了 ' + item.chose) + ' · 用时 ' + (item.ms / 1000).toFixed(1) + 's';
+      box.appendChild(cell);
+    });
+  }
+
+  /* ================= 交互绑定 ================= */
+  $('#btnStart').addEventListener('click', startTest);
+  $('#btnAgain').addEventListener('click', startTest);
+
+  $('#revToggle').addEventListener('click', function () {
+    var panel = $('#revPanel');
+    var open = panel.dataset.open !== 'false';
+    panel.dataset.open = open ? 'false' : 'true';
+    this.setAttribute('aria-expanded', String(!open));
+  });
+
+  $('#btnCopy').addEventListener('click', function () {
+    var r = evaluate();
+    var text = '【色觉自查结果】\n' +
+      '结论：' + r.title + '\n' +
+      '正确率：' + r.correct + '/' + r.total + '（' + (r.acc * 100).toFixed(1) + '%），用时 ' + fmtDur(r.elapsed) + '\n' +
+      '红绿图版：答错 ' + r.rgErr + '/' + r.rgN + '，蓝黄图版：答错 ' + r.byErr + '/' + r.byN +
+      '，对照图版：答错 ' + r.ctrlErr + '/' + r.ctrlN + '\n' +
+      '（屏幕自测结果，仅供参考，不构成医学诊断）';
+    var done = function () {
+      var b = $('#btnCopy');
+      var old = b.textContent;
+      b.textContent = '已复制 ✓';
+      setTimeout(function () { b.textContent = old; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { window.prompt('复制下面的文字：', text); });
+    } else {
+      window.prompt('复制下面的文字：', text);
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (state.screen !== 'quiz') return;
+    if (e.key >= '1' && e.key <= '4') {
+      var btns = document.querySelectorAll('#options .opt');
+      var b = btns[parseInt(e.key, 10) - 1];
+      if (b) { e.preventDefault(); b.click(); }
+    }
+  });
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    if (state.screen !== 'quiz') return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(paintCurrent, 160);
+  });
+
+  /* ================= 封面示例图版 ================= */
+  paintCanvas($('#demoA'), 122, '12', 'rgA', 20240611, 2);
+  paintCanvas($('#demoB'), 122, '8', 'by', 77123, 2);
+  paintCanvas($('#demoC'), 122, '6', 'ctrl', 5150, 1);
+
+})();
+</script>
+</body>
+</html>
